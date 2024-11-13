@@ -30,18 +30,19 @@ export default function SearchScreen() {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<MediaData[]>([]);
   const [trending, setTrending] = useState<MediaData[]>([]);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     getTrendingMedias();
   }, []);
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = async (input: string) => {
     try {
-      if (query && query.length > 2) {
+      if (input && input.length > 2) {
         setLoading(true);
         const [tvData, movieData] = await Promise.all([
-          fetchTVorMovieSearchResults("tv", query),
-          fetchTVorMovieSearchResults("movie", query),
+          fetchTVorMovieSearchResults("tv", input),
+          fetchTVorMovieSearchResults("movie", input),
         ]);
         setLoading(false);
         const resultsAll = [
@@ -65,7 +66,10 @@ export default function SearchScreen() {
     }
   };
 
-  const handleTextDebounce = useCallback(debounce(handleSearch, 300), []);
+  const handleTextDebounce = useCallback(
+    debounce((text) => handleSearch(text), 300),
+    []
+  );
 
   const getTrendingMedias = async () => {
     const [tvData, movieData] = await Promise.all([
@@ -82,13 +86,20 @@ export default function SearchScreen() {
       <SafeAreaView className="flex-1">
         <View className="m-3 flex-row justify-between items-center border border-zinc-700 rounded-full">
           <TextInput
-            onChangeText={handleTextDebounce}
+            value={query}
+            onChangeText={(text) => {
+              setQuery(text);
+              handleTextDebounce(text);
+            }}
             placeholder="Search Movies, TV and Dramas..."
             placeholderTextColor={"lightgray"}
             className="pb-1 pl-6 flex-1 text-base font-semibold text-white tracking-wider"
           />
           <TouchableOpacity
-            onPress={() => router.navigate("/")}
+            onPress={() => {
+              setQuery("");
+              setResults([]);
+            }}
             className="rounded-full p-3 m-1 bg-zinc-700"
           >
             <Feather name="x" size={24} color="white" />

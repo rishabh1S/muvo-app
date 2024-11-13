@@ -2,10 +2,11 @@ import axios from "axios";
 
 const BASE_URL = process.env.EXPO_PUBLIC_TMDB_API_URL;
 const API_KEY = process.env.EXPO_PUBLIC_TMDB_API_KEY;
+export const embedMovieUrl = process.env.EXPO_PUBLIC_MOVIE_URL;
+export const embedTvShowUrl = process.env.EXPO_PUBLIC_TV_URL;
+
 export const baseUrl = "https://image.tmdb.org/t/p/original";
 export const baseYoutubeUrl = "https://www.youtube.com/watch?v=";
-export const embedMovieUrl = `https://autoembed.co/movie/tmdb/`;
-export const embedTvShowUrl = `https://autoembed.co/tv/tmdb/`;
 
 const trendingMediaEndpoint = (type) =>
   `${BASE_URL}/trending/${type}/day?api_key=${API_KEY}&language=en-US`;

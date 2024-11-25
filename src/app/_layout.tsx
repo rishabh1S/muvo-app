@@ -5,6 +5,8 @@ import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { AuthProvider } from "../context/auth";
 import { GlobalProvider } from "../context/global";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -13,6 +15,51 @@ export const unstable_settings = {
 };
 
 SplashScreen.preventAutoHideAsync();
+
+function InitialLayout() {
+  return (
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="streammovie/[mediaId]/index"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="streammovie/[mediaId]/[videoKey]"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="streammovie/[mediaId]/watch"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="streamtv/[mediaId]/index"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="streamtv/[mediaId]/[videoKey]"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="streamtv/[mediaId]/[season]/[episode]/watch"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="seeAll"
+        options={{
+          headerStyle: {
+            backgroundColor: "#000",
+          },
+          headerTitleStyle: {
+            fontWeight: "600",
+            fontSize: 20,
+          },
+        }}
+      />
+    </Stack>
+  );
+}
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -34,54 +81,15 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
   return (
     <ThemeProvider value={DarkTheme}>
       <AuthProvider>
         <GlobalProvider>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="streammovie/[mediaId]/index"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="streammovie/[mediaId]/[videoKey]"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="streammovie/[mediaId]/watch"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="streamtv/[mediaId]/index"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="streamtv/[mediaId]/[videoKey]"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="streamtv/[mediaId]/[season]/[episode]/watch"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="seeAll"
-              options={{
-                headerStyle: {
-                  backgroundColor: "#000",
-                },
-                headerTitleStyle: {
-                  fontWeight: "600",
-                  fontSize: 20,
-                },
-              }}
-            />
-          </Stack>
+          <GestureHandlerRootView className="flex-1">
+            <BottomSheetModalProvider>
+              <InitialLayout />
+            </BottomSheetModalProvider>
+          </GestureHandlerRootView>
         </GlobalProvider>
       </AuthProvider>
     </ThemeProvider>

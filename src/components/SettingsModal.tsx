@@ -1,23 +1,16 @@
 import React from "react";
-import {
-  Platform,
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-  Text,
-} from "react-native";
+import { SafeAreaView, TouchableOpacity, View, Text } from "react-native";
 import Modal from "react-native-modal";
 import { useAuth } from "../context/auth";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
+import { ios } from "../constants";
 
 type SettingsModalProps = {
   isVisible: boolean;
   onClose: () => void;
 };
-
-const ios = Platform.OS === "ios";
 
 const SettingsModal = ({ isVisible, onClose }: SettingsModalProps) => {
   const { user, signOut } = useAuth();
@@ -41,9 +34,7 @@ const SettingsModal = ({ isVisible, onClose }: SettingsModalProps) => {
       className="m-0"
     >
       <LinearGradient colors={["#000", "#011", "#121"]} className="flex-1">
-        <SafeAreaView
-          className={`${ios ? "-mb-2" : "mb-3"} border-b border-neutral-800`}
-        >
+        <SafeAreaView className="mb-3 border-b border-neutral-800">
           <View className="flex-row items-center px-4 mb-2 space-x-4">
             <TouchableOpacity onPress={onClose}>
               <MaterialIcons
@@ -120,7 +111,7 @@ const SettingsModal = ({ isVisible, onClose }: SettingsModalProps) => {
           </TouchableOpacity>
           <View className="flex-col items-center space-y-1">
             <Text className="font-extralight text-xs text-neutral-300">
-              App version: 1.2.6
+              App version: 1.3.0
             </Text>
             <Text className="font-extralight text-xs text-neutral-300">
               &copy; {new Date().getFullYear()} Muvo. All rights reserved.

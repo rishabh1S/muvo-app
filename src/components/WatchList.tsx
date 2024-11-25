@@ -17,18 +17,18 @@ import {
   where,
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Dimensions,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import MarqueeView from "react-native-marquee-view";
-import RBSheet from "react-native-raw-bottom-sheet";
-
-const { height } = Dimensions.get("window");
+import { height } from "../constants";
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet";
+import Animated, {
+  useAnimatedStyle,
+  interpolateColor,
+} from "react-native-reanimated";
 
 interface WatchlistItemProps {
   item: {
@@ -108,7 +108,7 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({ item }) => {
   const auth = FIREBASE_AUTH;
   const userId = auth.currentUser?.uid;
   const watchlistRef = collection(FIRESTORE_DB, "WatchList");
-  const bottomSheetRef = useRef<RBSheet>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const checkWatchlist = useCallback(async () => {
     const watchlistQuery = query(
@@ -175,7 +175,7 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({ item }) => {
     } catch (error) {
       console.error("Error removing from watchlist:", error);
     } finally {
-      bottomSheetRef.current && bottomSheetRef.current.close();
+      bottomSheetModalRef.current?.close();
     }
   };
 
@@ -184,8 +184,21 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({ item }) => {
       item.mediaType === "tv"
         ? `/streamtv/${item.mediaId}`
         : `/streammovie/${item.mediaId}`;
+    bottomSheetModalRef.current?.close();
     router.navigate(route);
   };
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        pressBehavior="close"
+        {...props}
+      />
+    ),
+    []
+  );
 
   return (
     isWatchlist && (
@@ -199,9 +212,9 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({ item }) => {
             style={{ height: height * 0.115 }}
           />
         </TouchableOpacity>
-        <View className="flex-row justify-between">
-          {(data?.name || data?.title || "").length > 20 ? (
-            <MarqueeView style={{ width: 160 }}>
+        <View className="flex-row justify-between items-center">
+          {(data?.name || data?.title || "").length > 14 ? (
+            <MarqueeView style={{ width: 140 }}>
               <Text className="text-neutral-200 ml-1">
                 {data?.name || data?.title}
               </Text>
@@ -212,9 +225,7 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({ item }) => {
             </Text>
           )}
           <TouchableOpacity
-            onPress={() =>
-              bottomSheetRef.current && bottomSheetRef.current.open()
-            }
+            onPress={() => bottomSheetModalRef.current?.present()}
           >
             <Entypo
               name="dots-three-vertical"
@@ -224,51 +235,46 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({ item }) => {
             />
           </TouchableOpacity>
         </View>
-        {/* @ts-ignore */}
-        <RBSheet
-          ref={bottomSheetRef}
-          closeOnDragDown={true}
-          closeOnPressMask={true}
-          height={170}
-          customStyles={{
-            wrapper: {
-              backgroundColor: "rgba(0,0,0,0.7)",
-            },
-            draggableIcon: {
-              display: "none",
-            },
-            container: {
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              backgroundColor: "rgb(16, 16, 18)",
-            },
-          }}
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={0}
+          enableDynamicSizing
+          backdropComponent={renderBackdrop}
+          handleComponent={null}
+          enablePanDownToClose={false}
         >
-          <View className="flex-row justify-between py-4 mx-5 border-b border-zinc-800">
-            <Text className="text-neutral-200">
-              {data?.name || data?.title}
-            </Text>
-            <TouchableOpacity
-              onPress={() =>
-                bottomSheetRef.current && bottomSheetRef.current.close()
-              }
-            >
-              <AntDesign name="close" size={20} color="#777" />
+          <BottomSheetScrollView
+            scrollEnabled={false}
+            style={{
+              borderTopLeftRadius: 12,
+              borderTopRightRadius: 12,
+              backgroundColor: "rgb(32, 32, 32)",
+            }}
+          >
+            <View className="flex-row justify-between py-4 mx-5 border-b border-zinc-800">
+              <Text className="text-neutral-200">
+                {data?.name || data?.title}
+              </Text>
+              <TouchableOpacity
+                onPress={() => bottomSheetModalRef.current?.close()}
+              >
+                <AntDesign name="close" size={20} color="#777" />
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={handleViewDetails}>
+              <View className="py-4 px-4 flex-row space-x-4">
+                <Feather name="info" size={20} color="white" />
+                <Text className="text-neutral-200">View more details</Text>
+              </View>
             </TouchableOpacity>
-          </View>
-          <TouchableOpacity onPress={handleViewDetails}>
-            <View className="py-4 px-4 flex-row space-x-4">
-              <Feather name="info" size={20} color="white" />
-              <Text className="text-neutral-200">View more details</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleRemoveFromWatchlist}>
-            <View className="py-4 px-4 flex-row space-x-4">
-              <AntDesign name="close" size={20} color="white" />
-              <Text className="text-neutral-200">Remove from Watchlist</Text>
-            </View>
-          </TouchableOpacity>
-        </RBSheet>
+            <TouchableOpacity onPress={handleRemoveFromWatchlist}>
+              <View className="py-4 px-4 flex-row space-x-4">
+                <AntDesign name="close" size={20} color="white" />
+                <Text className="text-neutral-200">Remove from Watchlist</Text>
+              </View>
+            </TouchableOpacity>
+          </BottomSheetScrollView>
+        </BottomSheetModal>
       </View>
     )
   );

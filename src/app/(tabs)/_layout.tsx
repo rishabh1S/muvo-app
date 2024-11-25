@@ -9,6 +9,7 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { ios } from "../../constants";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -22,7 +23,7 @@ export default function TabLayout() {
           position: "absolute",
           borderTopWidth: 0,
           elevation: 0,
-          height: 55,
+          height: ios ? 70 : 60,
         },
         tabBarLabelStyle: {
           marginBottom: 8,

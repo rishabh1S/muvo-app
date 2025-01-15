@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
@@ -68,67 +70,71 @@ export default function LoginScreen() {
           className="absolute"
         />
       </View>
-      <View className="h-full w-full flex justify-center space-y-16 pb-10 z-10">
-        <View className="flex mx-5">
-          <Text className="text-white font-bold tracking-widest text-5xl">
-            Welcome Back!
-          </Text>
-        </View>
-        <View className="flex items-center mx-5 space-y-4">
-          <View className="bg-white/10 p-4 rounded-2xl w-full">
-            <TextInput
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-              placeholder="Email address"
-              placeholderTextColor={"gray"}
-              className="text-white"
-            />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+      >
+        <View className="h-full w-full flex justify-center space-y-16 pb-10 z-10">
+          <View className="flex mx-5">
+            <Text className="text-white font-bold tracking-widest text-5xl">
+              Welcome Back!
+            </Text>
           </View>
-          <View className="w-full mb-5">
-            <View className="bg-white/10 p-4 rounded-2xl">
+          <View className="flex items-center mx-5 space-y-4">
+            <View className="bg-white/10 p-4 rounded-2xl w-full">
               <TextInput
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-                placeholder="Password"
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+                placeholder="Email address"
                 placeholderTextColor={"gray"}
-                secureTextEntry={!showPassword}
                 className="text-white"
               />
-              <TouchableOpacity
-                onPress={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-[18px]"
-              >
-                <Feather
-                  name={showPassword ? "eye-off" : "eye"}
-                  size={24}
-                  color="#aeae"
+            </View>
+            <View className="w-full mb-5">
+              <View className="bg-white/10 p-4 rounded-2xl flex-row items-center justify-between">
+                <TextInput
+                  value={password}
+                  onChangeText={(text) => setPassword(text)}
+                  placeholder="Password"
+                  placeholderTextColor={"gray"}
+                  secureTextEntry={!showPassword}
+                  className="text-white"
                 />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Feather
+                    name={showPassword ? "eye-off" : "eye"}
+                    size={20}
+                    color="#aeae"
+                  />
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                onPress={handleForgotPassword}
+                className="flex-row justify-end mt-2"
+              >
+                <Text className="text-green-500">Forgot Password?</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity
-              onPress={handleForgotPassword}
-              className="flex-row justify-end mt-2"
+              onPress={handleSignIn}
+              className="w-full bg-green-400 p-3 rounded-xl mb-5 flex-row items-center justify-center space-x-4"
             >
-              <Text className="text-green-500">Forgot Password?</Text>
+              <Text className="text-xl font-bold text-white text-center">
+                Login
+              </Text>
+              {loading && <ActivityIndicator color="#aeae" />}
             </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            onPress={handleSignIn}
-            className="w-full bg-green-400 p-3 rounded-xl mb-5 flex-row items-center justify-center space-x-4"
-          >
-            <Text className="text-xl font-bold text-white text-center">
-              Login
-            </Text>
-            {loading && <ActivityIndicator color="#aeae" />}
-          </TouchableOpacity>
-          <View className="flex-row justify-center">
-            <Text className="text-neutral-300">First time using Muvo? </Text>
-            <TouchableOpacity onPress={() => router.replace("/register")}>
-              <Text className="text-green-500">Create an account</Text>
-            </TouchableOpacity>
+            <View className="flex-row justify-center">
+              <Text className="text-neutral-300">First time using Muvo? </Text>
+              <TouchableOpacity onPress={() => router.replace("/register")}>
+                <Text className="text-green-500">Create an account</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 }

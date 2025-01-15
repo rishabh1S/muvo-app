@@ -7,6 +7,8 @@ import {
   Dimensions,
   SafeAreaView,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
@@ -80,68 +82,72 @@ export default function RegisterScreen() {
           className="absolute"
         />
       </View>
-      <View className="h-full w-full flex justify-center space-y-16 pb-10 z-10">
-        <View className="flex mx-5">
-          <Text className="text-white font-bold tracking-widest text-5xl">
-            Create Account
-          </Text>
-        </View>
-        <View className="flex items-center mx-5 space-y-4">
-          <View className="bg-white/10 p-4 rounded-2xl w-full">
-            <TextInput
-              value={name}
-              onChangeText={(text) => setName(text)}
-              placeholder="Full Name"
-              placeholderTextColor={"gray"}
-              className="text-white"
-            />
-          </View>
-          <View className="bg-white/10 p-4 rounded-2xl w-full">
-            <TextInput
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-              placeholder="Email address"
-              placeholderTextColor={"gray"}
-              className="text-white"
-            />
-          </View>
-          <View className="bg-white/10 p-4 rounded-2xl w-full mb-5">
-            <TextInput
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              placeholder="Password"
-              placeholderTextColor={"gray"}
-              secureTextEntry={!showPassword}
-              className="text-white"
-            />
-            <TouchableOpacity
-              onPress={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[18px]"
-            >
-              <Feather
-                name={showPassword ? "eye-off" : "eye"}
-                size={24}
-                color="#aeae"
-              />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            onPress={() => signUp(name, email, password)}
-            className="w-full bg-green-400 p-3 rounded-2xl mb-5 flex-row items-center justify-center space-x-4"
-          >
-            <Text className="text-xl font-bold text-white text-center">
-              Sign Up
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+      >
+        <View className="h-full w-full flex justify-center space-y-16 pb-10 z-10">
+          <View className="flex mx-5">
+            <Text className="text-white font-bold tracking-widest text-5xl">
+              Create Account
             </Text>
-            {loading && <ActivityIndicator color="#aeae" />}
-          </TouchableOpacity>
-          <View className="flex-row justify-center">
-            <Text className="text-neutral-300">Already have an account? </Text>
-            <TouchableOpacity onPress={() => router.push("/login")}>
-              <Text className="text-green-500">Login</Text>
+          </View>
+          <View className="flex items-center mx-5 space-y-4">
+            <View className="bg-white/10 p-4 rounded-2xl w-full">
+              <TextInput
+                value={name}
+                onChangeText={(text) => setName(text)}
+                placeholder="Full Name"
+                placeholderTextColor={"gray"}
+                className="text-white"
+              />
+            </View>
+            <View className="bg-white/10 p-4 rounded-2xl w-full">
+              <TextInput
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+                placeholder="Email address"
+                placeholderTextColor={"gray"}
+                className="text-white"
+              />
+            </View>
+            <View className="w-full mb-5 bg-white/10 p-4 rounded-2xl flex-row items-center justify-between">
+              <TextInput
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                placeholder="Password"
+                placeholderTextColor={"gray"}
+                secureTextEntry={!showPassword}
+                className="text-white"
+              />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                <Feather
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={20}
+                  color="#aeae"
+                />
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              onPress={() => signUp(name, email, password)}
+              className="w-full bg-green-400 p-3 rounded-2xl mb-5 flex-row items-center justify-center space-x-4"
+            >
+              <Text className="text-xl font-bold text-white text-center">
+                Sign Up
+              </Text>
+              {loading && <ActivityIndicator color="#aeae" />}
             </TouchableOpacity>
+            <View className="flex-row justify-center">
+              <Text className="text-neutral-300">
+                Already have an account?{" "}
+              </Text>
+              <TouchableOpacity onPress={() => router.push("/login")}>
+                <Text className="text-green-500">Login</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 }

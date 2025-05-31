@@ -49,12 +49,12 @@ const VideoTrailer: React.FC<VideoTrailerProps> = ({
               rel: false,
             }}
             onError={() => setIsVideoPlayable(false)}
-            onChangeState={(state) => {
+            onChangeState={(state: string) => {
               if (state === "ended") {
                 playerRef.current?.seekTo(0, true);
               }
             }}
-            onFullScreenChange={async (isFullScreen) => {
+            onFullScreenChange={async (isFullScreen: any) => {
               if (isFullScreen) {
                 await ScreenOrientation.lockAsync(
                   ScreenOrientation.OrientationLock.LANDSCAPE

@@ -46,11 +46,11 @@ export default function SearchScreen() {
         ]);
         setLoading(false);
         const resultsAll = [
-          ...(tvData?.results).map((result: any) => ({
+          ...(tvData?.results ?? []).map((result: any) => ({
             ...result,
             mediaType: "tv",
           })),
-          ...(movieData?.results).map((result: any) => ({
+          ...(movieData?.results ?? []).map((result: any) => ({
             ...result,
             mediaType: "movie",
           })),
@@ -76,7 +76,10 @@ export default function SearchScreen() {
       fetchTrendingMedias("movie"),
       fetchTrendingMedias("tv"),
     ]);
-    const trendingAll = [...tvData?.results, ...movieData?.results];
+    const trendingAll = [
+      ...(tvData?.results ?? []),
+      ...(movieData?.results ?? []),
+    ];
     setTrending(trendingAll);
     setLoading(false);
   };
@@ -125,7 +128,7 @@ export default function SearchScreen() {
                 return (
                   <TouchableWithoutFeedback
                     key={result.id}
-                    onPress={() => router.navigate(route)}
+                    onPress={() => router.navigate(route as any)}
                   >
                     <View className="space-y-2 mb-4">
                       <Image

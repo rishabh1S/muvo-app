@@ -26,7 +26,7 @@ const CastItem: React.FC<{ person: any }> = ({ person }) => (
       <Image
         className="rounded-2xl h-24 w-20"
         source={{
-          uri: image342(person?.profile_path) || fallbackPersonImage,
+          uri: image342(person?.profile_path) ?? fallbackPersonImage,
         }}
       />
     </View>
@@ -63,7 +63,7 @@ const Cast: React.FC<CastProps> = ({ cast }) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 15 }}
         data={cast.slice(0, 10)}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_item, index) => index.toString()}
         renderItem={({ item, index }) => <CastItem key={index} person={item} />}
         estimatedItemSize={100}
       />

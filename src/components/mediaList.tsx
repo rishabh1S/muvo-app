@@ -34,7 +34,7 @@ const MediaList: React.FC<MediaListProps> = ({
   const handlePress = (item: MediaData) => {
     const route =
       mediaType === "tv" ? `/streamtv/${item.id}` : `/streammovie/${item.id}`;
-    router.navigate(route);
+    router.navigate(route as any);
   };
 
   const renderItem = ({ item }: { item: MediaData }) => (
@@ -42,7 +42,7 @@ const MediaList: React.FC<MediaListProps> = ({
       <View className="space-y-1 mr-4">
         <Image
           source={{
-            uri: image342(item.poster_path) || fallbackMoviePoster,
+            uri: image342(item.poster_path) ?? fallbackMoviePoster,
           }}
           className="rounded-2xl"
           style={{ width: width * 0.33, height: height * 0.22 }}
@@ -85,7 +85,7 @@ const MediaList: React.FC<MediaListProps> = ({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 15 }}
         data={data}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_item, index) => index.toString()}
         renderItem={renderItem}
         estimatedItemSize={140}
       />

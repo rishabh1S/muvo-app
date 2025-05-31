@@ -23,7 +23,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({ title, data, mediaType }) => {
       (item.media_type || mediaType) === "tv"
         ? `/streamtv/${item.id}`
         : `/streammovie/${item.id}`;
-    router.navigate(route);
+    router.navigate(route as any);
   };
 
   return (

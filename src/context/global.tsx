@@ -1,5 +1,11 @@
 import { MediaData } from "@/assets/types";
-import React, { ReactNode, createContext, useContext, useState } from "react";
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 interface SeeAllContextProps {
   children: ReactNode;
@@ -29,8 +35,13 @@ export const GlobalProvider: React.FC<SeeAllContextProps> = ({ children }) => {
     setSeeAllData({ title, data, mediaType });
   };
 
+  const contextValue = useMemo(
+    () => ({ seeAllData, setSeeAll }),
+    [seeAllData, setSeeAll]
+  );
+
   return (
-    <GlobalContext.Provider value={{ seeAllData, setSeeAll }}>
+    <GlobalContext.Provider value={contextValue}>
       {children}
     </GlobalContext.Provider>
   );

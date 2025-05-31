@@ -19,7 +19,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { FIREBASE_AUTH as auth } from "@/firebase-config";
-var { width, height } = Dimensions.get("window");
+let { width, height } = Dimensions.get("window");
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");

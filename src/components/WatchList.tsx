@@ -185,7 +185,7 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({ item }) => {
         ? `/streamtv/${item.mediaId}`
         : `/streammovie/${item.mediaId}`;
     bottomSheetModalRef.current?.close();
-    router.navigate(route);
+    router.navigate(route as any);
   };
 
   const renderBackdrop = useCallback(

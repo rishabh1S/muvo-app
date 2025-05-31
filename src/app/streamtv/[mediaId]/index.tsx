@@ -7,7 +7,11 @@ import {
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Button,
@@ -30,7 +34,6 @@ import {
   fetchTvEpisodeDetails,
 } from "@/api/media";
 import { MediaData, VideoDataItem } from "@/assets/types";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function ShowsScreen() {
@@ -231,9 +234,9 @@ export default function ShowsScreen() {
               >
                 {show?.seasons
                   ?.filter((season: any) => season.name !== "Specials")
-                  .map((season: any, index) => (
+                  .map((season: any) => (
                     <TouchableOpacity
-                      key={index}
+                      key={season.season_number}
                       onPress={() => setSelectedSeason(season.season_number)}
                       className={`mx-3 ${
                         selectedSeason === season.season_number

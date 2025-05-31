@@ -24,7 +24,7 @@ import {
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
-var { width, height } = Dimensions.get("window");
+let { width, height } = Dimensions.get("window");
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState("");

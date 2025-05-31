@@ -28,7 +28,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item }) => {
       item.media_type === "tv"
         ? `/streamtv/${item.id}`
         : `/streammovie/${item.id}`;
-    router.navigate(route);
+    router.navigate(route as any);
   };
   return (
     <TouchableWithoutFeedback onPress={handlePress}>

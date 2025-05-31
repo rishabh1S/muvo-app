@@ -17,7 +17,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { MediaData } from "@/assets/types";
 import { LinearGradient } from "expo-linear-gradient";
-
+import "expo-router/entry";
 const ios = Platform.OS === "ios";
 
 export default function HomeScreen() {
@@ -42,8 +42,8 @@ export default function HomeScreen() {
       fetchTrendingMedias("tv"),
     ]);
     const trendingAll = [
-      ...tvData?.results.slice(0, 10),
-      ...movieData?.results.slice(0, 10),
+      ...(tvData?.results ?? []).slice(0, 10),
+      ...(movieData?.results ?? []).slice(0, 10),
     ];
     setTrending(trendingAll);
     setLoading(false);

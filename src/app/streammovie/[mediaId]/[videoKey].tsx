@@ -21,7 +21,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const ios = Platform.OS === "ios";
 
-export default function index() {
+export default function Index() {
   const { mediaId, videoKey } = useLocalSearchParams<{
     mediaId: string;
     videoKey: string;

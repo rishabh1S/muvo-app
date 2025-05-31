@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, Share } from "react-native";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -56,7 +56,7 @@ const MediaActions: React.FC<MediaActionsProps> = ({
       if (!userRef) return;
       const userDoc = await getDoc(userRef);
       if (!userDoc.exists()) return;
-      const watchlistArray = userDoc.data().watchlist || [];
+      const watchlistArray = userDoc.data().watchlist ?? [];
       const watchlistQuery = query(
         watchlistRef,
         where("userId", "==", userId),
@@ -75,16 +75,14 @@ const MediaActions: React.FC<MediaActionsProps> = ({
         await updateDoc(userRef, {
           watchlist: updatedWatchlist,
         });
-      } else {
-        if (querySnapshot.empty) {
-          const watchlistDocRef = await addDoc(watchlistRef, {
-            mediaId,
-            mediaType,
-            userId,
-          });
-          const updatedWatchlist = [...watchlistArray, watchlistDocRef.id];
-          await updateDoc(userRef, { watchlist: updatedWatchlist });
-        }
+      } else if (querySnapshot.empty) {
+        const watchlistDocRef = await addDoc(watchlistRef, {
+          mediaId,
+          mediaType,
+          userId,
+        });
+        const updatedWatchlist = [...watchlistArray, watchlistDocRef.id];
+        await updateDoc(userRef, { watchlist: updatedWatchlist });
       }
 
       setIsWatchlist(!isWatchlist);

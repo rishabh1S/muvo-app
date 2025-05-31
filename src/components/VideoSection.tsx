@@ -24,7 +24,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({
           mediaType === "tv"
             ? `/streamtv/${mediaId}/${item.key}`
             : `/streammovie/${mediaId}/${item.key}`;
-        router.navigate(route);
+        router.navigate(route as any);
       }}
       className="mr-3"
     >

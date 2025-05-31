@@ -4,7 +4,7 @@ import { useGlobal } from "../context/global";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "expo-router";
 
-export default function seeAll() {
+export default function SeeAll() {
   const { seeAllData } = useGlobal();
   const navigation = useNavigation();
 

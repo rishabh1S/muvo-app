@@ -3,6 +3,8 @@ import React, {
   useState,
   useContext,
   PropsWithChildren,
+  JSX,
+  useMemo,
 } from "react";
 import { router } from "expo-router";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -44,7 +46,9 @@ export function useAuth(): ContextInterface {
   return context;
 }
 
-export function AuthProvider({ children }: PropsWithChildren): JSX.Element {
+export function AuthProvider({
+  children,
+}: Readonly<PropsWithChildren>): JSX.Element {
   const [user, setUser] = useState<User>(initialState);
 
   useEffect(() => {
@@ -57,29 +61,30 @@ export function AuthProvider({ children }: PropsWithChildren): JSX.Element {
           uid: firebaseUser.providerData[0].uid,
           createdAt: firebaseUser.metadata.creationTime!,
           email: firebaseUser.providerData[0].email!,
-          name: userDoc.data()?.name || "",
+          name: userDoc.data()?.name ?? "",
         };
         setUser(userData);
-        router.replace("/(tabs)");
+        router.replace("/");
       } else {
-        router.replace("/(auth)/login");
+        router.replace("/login");
       }
     });
 
     return () => unsubscribe();
   }, []);
 
+  const contextValue = useMemo(
+    () => ({
+      user,
+      signOut: () => {
+        setUser(initialState);
+        signOut(auth);
+      },
+    }),
+    [user]
+  );
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        signOut: () => {
-          setUser(initialState);
-          signOut(auth);
-        },
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 }
